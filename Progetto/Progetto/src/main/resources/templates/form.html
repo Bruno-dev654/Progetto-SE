@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Analisi Frase</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+    <div class="container">
+        <h1>Inserisci una frase da analizzare</h1>
+        <form action="#" th:action="@{/analyze}" method="post">
+            <input type="text" name="frase" placeholder="Scrivi qui la frase..." required />
+            <button type="submit">Analizza</button>
+        </form>
+
+        <div th:if="${risultato}">
+            <h2>Risultato:</h2>
+            <p th:text="${risultato}"></p>
+        </div>
+    </div>
+</body>
+</html>
