@@ -11,7 +11,6 @@ public class HomeController {
     public String showForm() {
         return "form";
     }
-int lenght_1 = 5;
     @PostMapping("/analyze")
     public String analyzePhrase(@RequestParam("frase") String frase, Model model) {
         // Esempio: Analisi semplice (conteggio parole)
