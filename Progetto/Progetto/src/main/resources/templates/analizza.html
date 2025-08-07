@@ -100,14 +100,15 @@
       <h1>Benvenuto nella pagina Analizza!</h1>
       <p>Inserisci una frase da analizzare nel campo sottostante e premi "Analizza".</p>
       
-      <input type="text" class="input-bar" placeholder="Scrivi qui la tua frase...">
+      <form action="/analizza" method="POST"></form>
+      <input type="text" name="frase" class="input-bar" placeholder="Scrivi qui la tua frase...">
       
       <div class="checkbox-container">
         <input type="checkbox" id="albero_sintattico">
         <label for="albero_sintattico">Visualizzazione albero sintattico</label>
       </div>
 
-      <button class="analyze-button">Analizza</button>
+      <button type="submit" class="analyze-button">Analizza</button>
     </div>
 
 </body>

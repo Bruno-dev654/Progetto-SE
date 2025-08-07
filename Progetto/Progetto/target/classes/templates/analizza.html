@@ -40,7 +40,6 @@
             padding: 20px;
         }
         
-        /* Stili per la barra di input */
         .input-bar {
             width: 70%;
             max-width: 600px;
@@ -49,10 +48,28 @@
             font-size: 16px;
             border: 2px solid #ccc;
             border-radius: 5px;
-            box-sizing: border-box; /* Assicura che padding e border siano inclusi nella larghezza */
+            box-sizing: border-box;
+            transition: transform 0.3s ease;
+        }
+
+        .input-bar:hover {
+            transform: scale(1.02);
         }
         
-        /* Stili per il bottone Analizza */
+        /* Stili per il contenitore del checkbox */
+        .checkbox-container {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            transition: transform 0.3s ease; /* Aggiunto */
+        }
+        
+        .checkbox-container:hover {
+            transform: scale(1.05); /* Aggiunto */
+        }
+        
         .analyze-button {
             margin-top: 15px;
             padding: 10px 20px;
@@ -62,10 +79,11 @@
             color: white;
             border: none;
             border-radius: 5px;
-            transition: background-color 0.3s;
+            transition: transform 0.3s ease, background-color 0.3s;
         }
 
         .analyze-button:hover {
+            transform: scale(1.05);
             background-color: #038d58;
         }
     </style>
@@ -82,9 +100,15 @@
       <h1>Benvenuto nella pagina Analizza!</h1>
       <p>Inserisci una frase da analizzare nel campo sottostante e premi "Analizza".</p>
       
-      <input type="text" class="input-bar" placeholder="Scrivi qui la tua frase...">
+      <form action="/analizza" method="POST"></form>
+      <input type="text" name="frase" class="input-bar" placeholder="Scrivi qui la tua frase...">
       
-      <button class="analyze-button">Analizza</button>
+      <div class="checkbox-container">
+        <input type="checkbox" id="albero_sintattico">
+        <label for="albero_sintattico">Visualizzazione albero sintattico</label>
+      </div>
+
+      <button type="submit" class="analyze-button">Analizza</button>
     </div>
 
 </body>
