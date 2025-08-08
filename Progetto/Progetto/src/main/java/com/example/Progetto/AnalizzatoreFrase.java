@@ -72,6 +72,7 @@ public class AnalizzatoreFrase {
                 } else if (partOfSpeech == Tag.ADJ) {
                     aggettivi.add(parola);
                 } else if (partOfSpeech == Tag.VERB) {
+                    //si può aggiumgere il tempo verbale in questo punto
                     verbi.add(parola);
                 }
             }
