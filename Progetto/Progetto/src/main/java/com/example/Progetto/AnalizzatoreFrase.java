@@ -11,38 +11,37 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-
 public class AnalizzatoreFrase {
 
-    private List<String> nomi;
-    private List<String> aggettivi;
-    private List<String> verbi;
+    private List<String> nomiFrase;
+    private List<String> aggettiviFrase;
+    private List<String> verbiFrase;
 
     public AnalizzatoreFrase() {
-        this.nomi = new ArrayList<>();
-        this.aggettivi = new ArrayList<>();
-        this.verbi = new ArrayList<>();
+        this.nomiFrase = new ArrayList<>();
+        this.aggettiviFrase = new ArrayList<>();
+        this.verbiFrase = new ArrayList<>();
     }
 
     // Metodi per ottenere gli iteratori
     public Iterator<String> getIteratoreNomi() {
-        return nomi.iterator();
+        return nomiFrase.iterator();
     }
 
     public Iterator<String> getIteratoreAggettivi() {
-        return aggettivi.iterator();
+        return aggettiviFrase.iterator();
     }
 
     public Iterator<String> getIteratoreVerbi() {
-        return verbi.iterator();
+        return verbiFrase.iterator();
     }
 
     
     public void analizzaFrase(String frase) throws IOException {
-        //Pulizia di ogni array per ogni analizzazione
-        nomi.clear();
-        aggettivi.clear();
-        verbi.clear();
+        Dizionario dizionario = new Dizionario();
+        nomiFrase.clear();
+        aggettiviFrase.clear();
+        verbiFrase.clear();
 
         // Inizializzazione il client per l'API di Google Cloud Natural Language
         try (LanguageServiceClient language = LanguageServiceClient.create()) {
@@ -68,12 +67,14 @@ public class AnalizzatoreFrase {
                 
                 // Assegnazione il token all'array corretto in base al suo tag
                 if (partOfSpeech == Tag.NOUN) {
-                    nomi.add(parola);
+                    dizionario.aggiungiNome(parola);    // Aggiungi il nome al dizionario
+                    nomiFrase.add(parola);
                 } else if (partOfSpeech == Tag.ADJ) {
-                    aggettivi.add(parola);
+                    dizionario.aggiungiAggettivo(parola);   // Aggiungi l'aggettivo al dizionario
+                    aggettiviFrase.add(parola);
                 } else if (partOfSpeech == Tag.VERB) {
-                    //si può aggiumgere il tempo verbale in questo punto
-                    verbi.add(parola);
+                    dizionario.aggiungiVerbo(parola);   // Aggiungi il verbo al dizionario
+                    verbiFrase.add(parola);
                 }
             }
         }

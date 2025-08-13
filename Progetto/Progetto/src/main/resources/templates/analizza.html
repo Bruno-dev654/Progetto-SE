@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagina Analizza</title>
     <style>
+        /* CSS rimane invariato */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -56,18 +57,17 @@
             transform: scale(1.02);
         }
         
-        /* Stili per il contenitore del checkbox */
         .checkbox-container {
             margin-top: 15px;
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 5px;
-            transition: transform 0.3s ease; /* Aggiunto */
+            transition: transform 0.3s ease;
         }
         
         .checkbox-container:hover {
-            transform: scale(1.05); /* Aggiunto */
+            transform: scale(1.05);
         }
         
         .analyze-button {
@@ -86,6 +86,29 @@
             transform: scale(1.05);
             background-color: #038d58;
         }
+        
+        .results {
+            margin-top: 30px;
+            text-align: left;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+        .results h3 {
+            color: #04AA6D;
+        }
+        .results ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .results li {
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            padding: 5px 10px;
+        }
     </style>
 </head>
 <body>
@@ -93,22 +116,46 @@
     <div class="navbar">
       <a href="index.html">HOME</a>
       <a href="genera.html">GENERA</a>
-      <a class="active" href="analizza.html">ANALIZZA</a>
+      <a class="active" href="/analizza">ANALIZZA</a>
     </div>
 
     <div class="content">
       <h1>Benvenuto nella pagina Analizza!</h1>
       <p>Inserisci una frase da analizzare nel campo sottostante e premi "Analizza".</p>
-      
-      <form action="/analizza" method="POST"></form>
-      <input type="text" name="frase" class="input-bar" placeholder="Scrivi qui la tua frase...">
-      
-      <div class="checkbox-container">
-        <input type="checkbox" id="albero_sintattico">
-        <label for="albero_sintattico">Visualizzazione albero sintattico</label>
+
+      <form action="/analizza" method="POST">
+        <input type="text" name="frase" class="input-bar" placeholder="Scrivi qui la tua frase...">
+
+        <div class="checkbox-container">
+          <input type="checkbox" id="albero_sintattico">
+          <label for="albero_sintattico">Visualizzazione albero sintattico</label>
+        </div>
+
+        <button type="submit" class="analyze-button">Analizza</button>
+      </form>
+    </div>
+
+    <div class="results" th:if="${nomi != null}">
+      <h2>Risultato Analisi</h2>
+
+      <div th:if="${error}" style="color: red;">
+          <p th:text="${error}"></p>
       </div>
 
-      <button type="submit" class="analyze-button">Analizza</button>
+      <h3>Nomi</h3>
+      <ul>
+          <li th:each="nome : ${nomi}" th:text="${nome}"></li>
+      </ul>
+
+      <h3>Aggettivi</h3>
+      <ul>
+          <li th:each="aggettivo : ${aggettivi}" th:text="${aggettivo}"></li>
+      </ul>
+
+      <h3>Verbi</h3>
+      <ul>
+          <li th:each="verbo : ${verbi}" th:text="${verbo}"></li>
+      </ul>
     </div>
 
 </body>
