@@ -36,13 +36,37 @@ public class AnalizzatoreFrase {
         return verbiFrase.iterator();
     }
 
+
+    public boolean isEmptyNomi()
+    {
+      if(nomiFrase.isEmpty()) return true;
+      else return false;
+    }
+
+   public boolean isEmptyAggettivi()
+    {
+      if(aggettiviFrase.isEmpty()) return true;
+      else return false;
+    }
+
+   public boolean isEmptyVerbi()
+    {
+      if(verbiFrase.isEmpty()) return true;
+      else return false;
+    }
     
     public void analizzaFrase(String frase) throws IOException {
-        Dizionario dizionario = new Dizionario();
+        //Dizionario dizionario = new Dizionario();
         nomiFrase.clear();
         aggettiviFrase.clear();
         verbiFrase.clear();
 
+
+        // Nel tuo codice Java, prima della chiamata all'API
+      System.setProperty("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\avvio\\se2025-468911-b0e2885e8be3.json");
+
+
+      System.setProperty("GOOGLE_CLOUD_PROJECT", "se2025-468911");
         // Inizializzazione il client per l'API di Google Cloud Natural Language
         try (LanguageServiceClient language = LanguageServiceClient.create()) {
             
@@ -67,13 +91,13 @@ public class AnalizzatoreFrase {
                 
                 // Assegnazione il token all'array corretto in base al suo tag
                 if (partOfSpeech == Tag.NOUN) {
-                    dizionario.aggiungiNome(parola);    // Aggiungi il nome al dizionario
+                    //dizionario.aggiungiNome(parola);    // Aggiungi il nome al dizionario
                     nomiFrase.add(parola);
                 } else if (partOfSpeech == Tag.ADJ) {
-                    dizionario.aggiungiAggettivo(parola);   // Aggiungi l'aggettivo al dizionario
+                    //dizionario.aggiungiAggettivo(parola);   // Aggiungi l'aggettivo al dizionario
                     aggettiviFrase.add(parola);
                 } else if (partOfSpeech == Tag.VERB) {
-                    dizionario.aggiungiVerbo(parola);   // Aggiungi il verbo al dizionario
+                    //dizionario.aggiungiVerbo(parola);   // Aggiungi il verbo al dizionario
                     verbiFrase.add(parola);
                 }
             }

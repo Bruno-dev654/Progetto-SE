@@ -114,8 +114,8 @@
 <body>
 
     <div class="navbar">
-      <a href="index.html">HOME</a>
-      <a href="genera.html">GENERA</a>
+      <a href="/index">HOME</a>
+      <a href="/genera">GENERA</a>
       <a class="active" href="/analizza">ANALIZZA</a>
     </div>
 
@@ -133,15 +133,23 @@
 
         <button type="submit" class="analyze-button">Analizza</button>
       </form>
-    </div>
-
-    <div class="results" th:if="${nomi != null}">
+      
       <h2>Risultato Analisi</h2>
-
+      
       <div th:if="${error}" style="color: red;">
           <p th:text="${error}"></p>
       </div>
 
+      <div th:if="${emptyNomi}" style="color: red;">
+          <p th:text="${emptyNomi}"></p>
+      </div>
+      <div th:if="${emptyAggettivi}" style="color: red;">
+          <p th:text="${emptyAggettivi}"></p>
+      </div>
+      <div th:if="${emptyVerbi}" style="color: red;">
+          <p th:text="${emptyVerbi}"></p>
+      </div>
+      
       <h3>Nomi</h3>
       <ul>
           <li th:each="nome : ${nomi}" th:text="${nome}"></li>
