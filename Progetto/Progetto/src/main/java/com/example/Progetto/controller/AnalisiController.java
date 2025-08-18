@@ -31,37 +31,35 @@ public class AnalisiController {
     }
     
     @PostMapping("/analizza")
-    public String analyzePhrase(@RequestParam("frase") String frase, Model model) throws IOException{
+    public String analyzePhrase(@RequestParam("frase") String frase,@RequestParam(name = "albero_sintattico", required = false) boolean visualizzaAlbero, Model model) throws IOException{
         AnalizzatoreFrase analizzatore = new AnalizzatoreFrase();
            try {
-        
+
+            // Se la frase è vuota, non facciamo l'analisi
+            if (frase == null || frase.trim().isEmpty()) {
+                model.addAttribute("error", "Per favore, inserisci una frase da analizzare.");
+                return "analizza";
+            }
             analizzatore.analizzaFrase(frase);
-            // ... il resto del tuo codice per aggiungere gli attributi
+
+            // Aggiungi le liste di risultati al model per passarle a Thymeleaf.
+            model.addAttribute("nomi", analizzatore.getNomiFrase());
+            model.addAttribute("aggettivi", analizzatore.getAggettiviFrase());
+            model.addAttribute("verbi", analizzatore.getVerbiFrase());
+
+
+            model.addAttribute("sizeNomi", analizzatore.getSizeNomi());
+            model.addAttribute("sizeAggettivi", analizzatore.getSizeAggettivi());
+            model.addAttribute("sizeVerbi", analizzatore.getSizeVerbi());
+
+
             } catch (Exception e) { // Cambia IOException con Exception per catturare ogni tipo di errore
             e.printStackTrace(); // Stampa l'errore completo nel log
             model.addAttribute("error", "Errore durante l'analisi: " + e.getMessage());
             }
-
-            
-            if (analizzatore.isEmptyNomi()) model.addAttribute("emptyNomi", "la lista nomi è vuota");
-            else    model.addAttribute("emptyNomi", "la lista nomi è piena");
-
-            if (analizzatore.isEmptyAggettivi()) model.addAttribute("emptyAggettivi", "la lista aggettivi è vuota");
-            else    model.addAttribute("emptyAggettivi", "la lista aggettivi è piena");
-
-            if (analizzatore.isEmptyVerbi()) model.addAttribute("emptyVerbi", "la lista verbi è vuota");
-            else    model.addAttribute("emptyVerbi", "la lista verbi è piena");
-            
-            
+        
             // Nota: ho rimosso la parte del dizionario per mantenere il codice più aderente a quello che hai fornito.
             // Se usi la classe Dizionario, il codice sarebbe leggermente diverso.
-
-            /*
-            model.addAttribute("nomi", analizzatore.getIteratoreNomi());
-            model.addAttribute("aggettivi", analizzatore.getIteratoreAggettivi());
-            model.addAttribute("verbi", analizzatore.getIteratoreVerbi());
-            */
-
 
         return "analizza"; // Restituisce lo stesso file HTML per mostrare i risultati
     }

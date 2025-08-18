@@ -8,7 +8,6 @@ import com.google.cloud.language.v1.Token;
 import com.google.cloud.language.v1.PartOfSpeech.Tag;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class AnalizzatoreFrase {
@@ -23,20 +22,34 @@ public class AnalizzatoreFrase {
         this.verbiFrase = new ArrayList<>();
     }
 
-    // Metodi per ottenere gli iteratori
-    public Iterator<String> getIteratoreNomi() {
-        return nomiFrase.iterator();
+    // GETTER PER THYMELEAF
+    public List<String> getNomiFrase() {
+        return nomiFrase;
     }
 
-    public Iterator<String> getIteratoreAggettivi() {
-        return aggettiviFrase.iterator();
+    public List<String> getAggettiviFrase() {
+        return aggettiviFrase;
     }
 
-    public Iterator<String> getIteratoreVerbi() {
-        return verbiFrase.iterator();
+    public List<String> getVerbiFrase() {
+        return verbiFrase;
     }
 
+   //Metodi per vedere la grandezza delle liste
+    public int getSizeNomi() {
+        return nomiFrase.size();
+    }
 
+    public int getSizeAggettivi() {
+        return aggettiviFrase.size();
+    }
+
+    public int getSizeVerbi() {
+        return verbiFrase.size();
+    }
+
+    //Metodi per vedere se sono vuote le liste
+    //Fatto per controllare se funzionava il metodo per analizare la frase
     public boolean isEmptyNomi()
     {
       if(nomiFrase.isEmpty()) return true;
@@ -55,6 +68,7 @@ public class AnalizzatoreFrase {
       else return false;
     }
     
+    //Metodo di analizzazione della frase 
     public void analizzaFrase(String frase) throws IOException {
         //Dizionario dizionario = new Dizionario();
         nomiFrase.clear();
@@ -62,11 +76,7 @@ public class AnalizzatoreFrase {
         verbiFrase.clear();
 
 
-        // Nel tuo codice Java, prima della chiamata all'API
-      System.setProperty("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\avvio\\se2025-468911-b0e2885e8be3.json");
-
-
-      System.setProperty("GOOGLE_CLOUD_PROJECT", "se2025-468911");
+    
         // Inizializzazione il client per l'API di Google Cloud Natural Language
         try (LanguageServiceClient language = LanguageServiceClient.create()) {
             

@@ -133,37 +133,32 @@
 
         <button type="submit" class="analyze-button">Analizza</button>
       </form>
-      
-      <h2>Risultato Analisi</h2>
-      
-      <div th:if="${error}" style="color: red;">
-          <p th:text="${error}"></p>
-      </div>
 
-      <div th:if="${emptyNomi}" style="color: red;">
-          <p th:text="${emptyNomi}"></p>
-      </div>
-      <div th:if="${emptyAggettivi}" style="color: red;">
-          <p th:text="${emptyAggettivi}"></p>
-      </div>
-      <div th:if="${emptyVerbi}" style="color: red;">
-          <p th:text="${emptyVerbi}"></p>
-      </div>
-      
-      <h3>Nomi</h3>
-      <ul>
-          <li th:each="nome : ${nomi}" th:text="${nome}"></li>
-      </ul>
+      <div class="results" th:if="${nomi != null}">
+            <h2>Risultato Analisi</h2>
 
-      <h3>Aggettivi</h3>
-      <ul>
-          <li th:each="aggettivo : ${aggettivi}" th:text="${aggettivo}"></li>
-      </ul>
+            <div th:if="${error}" style="color: red;">
+                <p th:text="${error}"></p>
+            </div>
 
-      <h3>Verbi</h3>
-      <ul>
-          <li th:each="verbo : ${verbi}" th:text="${verbo}"></li>
-      </ul>
+            <h3>Nomi (<span th:text="${sizeNomi}">0</span>)</h3>
+            <p th:if="${#lists.isEmpty(nomi)}">Nessun nome trovato.</p>
+            <ul th:unless="${#lists.isEmpty(nomi)}">
+                <li th:each="nome : ${nomi}" th:text="${nome}"></li>
+            </ul>
+
+            <h3>Aggettivi (<span th:text="${sizeAggettivi}">0</span>)</h3>
+            <p th:if="${#lists.isEmpty(aggettivi)}">Nessun aggettivo trovato.</p>
+            <ul th:unless="${#lists.isEmpty(aggettivi)}">
+                <li th:each="aggettivo : ${aggettivi}" th:text="${aggettivo}"></li>
+            </ul>
+
+            <h3>Verbi (<span th:text="${sizeVerbi}">0</span>)</h3>
+            <p th:if="${#lists.isEmpty(verbi)}">Nessun verbo trovato.</p>
+            <ul th:unless="${#lists.isEmpty(verbi)}">
+                <li th:each="verbo : ${verbi}" th:text="${verbo}"></li>
+            </ul>
+            
     </div>
 
 </body>
