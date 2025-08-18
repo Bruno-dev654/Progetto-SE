@@ -1,0 +1,8 @@
+# Ignora le credenziali di Google Cloud
+*.json
+
+# Ignora archivi compressi
+*.zip
+
+# Ignora la cartella di build di Maven
+target/
