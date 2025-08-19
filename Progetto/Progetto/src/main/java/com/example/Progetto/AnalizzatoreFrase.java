@@ -19,13 +19,15 @@ import java.util.List;
 public class AnalizzatoreFrase {
 
     private final LanguageServiceClient languageClient; // 2. Aggiungi il client come campo della classe
+    private final Dizionario dizionario; // inietto il dizionario
     private List<String> nomiFrase;
     private List<String> aggettiviFrase;
     private List<String> verbiFrase;
 
     @Autowired // 3. Inietta il LanguageServiceClient creato dalla configurazione
-    public AnalizzatoreFrase(LanguageServiceClient languageClient) {
+    public AnalizzatoreFrase(LanguageServiceClient languageClient, Dizionario dizionario) {
         this.languageClient = languageClient;
+        this.dizionario = dizionario;
         this.nomiFrase = new ArrayList<>();
         this.aggettiviFrase = new ArrayList<>();
         this.verbiFrase = new ArrayList<>();
@@ -79,9 +81,6 @@ public class AnalizzatoreFrase {
     
     //Metodo di analizzazione della frase 
     public void analizzaFrase(String frase) {
-
-        // Inizializza un nuovo dizionario
-        Dizionario dizionario = new Dizionario();
 
         nomiFrase.clear();
         aggettiviFrase.clear();

@@ -3,28 +3,30 @@ package com.example.Progetto;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+@Component 
 public class Dizionario {
     
-    public static List<String> nomi;
-    public static List<String> aggettivi;
-    public static List<String> verbi;
-
-    public Dizionario() {
-        this.nomi = new ArrayList<>();
-        this.aggettivi = new ArrayList<>();
-        this.verbi = new ArrayList<>();
-    }
+    public static List<String> nomi=  new ArrayList<>();
+    public static List<String> aggettivi = new ArrayList<>();
+    public static List<String> verbi = new ArrayList<>();
 
     public void aggiungiNome(String nome) {
-        this.nomi.add(nome);
+         if (!nomi.contains(nome)) {
+            nomi.add(nome);
+        }
     }
 
     public void aggiungiAggettivo(String aggettivo) {
-        this.aggettivi.add(aggettivo);
+        if (!aggettivi.contains(aggettivo)) {
+            aggettivi.add(aggettivo);
+        }
     }
 
     public void aggiungiVerbo(String verbo) {
-        this.verbi.add(verbo);
+        if (!verbi.contains(verbo)) {
+            verbi.add(verbo);
+        }
     }    
 
     public List<String> getNomi() {
