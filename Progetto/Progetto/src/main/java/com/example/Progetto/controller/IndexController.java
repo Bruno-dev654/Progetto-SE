@@ -1,8 +1,9 @@
-package com.example.Progetto;
+package com.example.Progetto.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import com.example.Progetto.Dizionario;
 
 @Controller
 public class IndexController {
