@@ -26,4 +26,16 @@ public class Dizionario {
     public void aggiungiVerbo(String verbo) {
         this.verbi.add(verbo);
     }    
+
+    public List<String> getNomi() {
+        return nomi;
+    }
+
+    public List<String> getAggettivi() {
+        return aggettivi;
+    }
+
+    public List<String> getVerbi() {
+        return verbi;
+    }
 }
