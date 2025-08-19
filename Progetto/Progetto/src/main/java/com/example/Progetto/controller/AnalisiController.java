@@ -1,38 +1,43 @@
 package com.example.Progetto.controller;
 
+
 import java.io.IOException;
-
-//import java.io.IOException;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.example.Progetto.AnalizzatoreFrase;
- 
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 @Controller
 public class AnalisiController {
     
     // Questo metodo gestisce la richiesta GET per mostrare il form iniziale
     @GetMapping("/analizza")
-    public String analizza() {
-        return "analizza"; // Restituisce il nome del file analizza.html
-    }
+    public String analizza() { return "analizza"; }
 
     @GetMapping("/index")
-    public String index() {
-        return "index"; // Restituisce il nome del file analizza.html
-    }
+    public String index() { return "index"; }
 
     // Questo metodo gestirà la richiesta per la pagina "genera"
     @GetMapping("/genera")
-    public String generaPage() {
-        return "genera"; // Restituisce il nome del file HTML senza estensione
-    }
+    public String generaPage() { return "genera"; }
     
+    // 1. Dichiara il servizio come dipendenza
+    private final AnalizzatoreFrase analizzatore;
+
+    // 2. Inietta il servizio tramite il costruttore
+    @Autowired
+    public AnalisiController(AnalizzatoreFrase analizzatore) {
+        this.analizzatore = analizzatore;
+    }
+
+
+
     @PostMapping("/analizza")
     public String analyzePhrase(@RequestParam("frase") String frase,@RequestParam(name = "albero_sintattico", required = false) boolean visualizzaAlbero, Model model) throws IOException{
-        AnalizzatoreFrase analizzatore = new AnalizzatoreFrase();
+        
            try {
 
             // Se la frase è vuota, non facciamo l'analisi

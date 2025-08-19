@@ -1,4 +1,7 @@
 package com.example.Progetto;
+//import com.google.cloud.language.v1.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import com.google.cloud.language.v1.AnalyzeSyntaxRequest;
 import com.google.cloud.language.v1.AnalyzeSyntaxResponse;
 import com.google.cloud.language.v1.Document;
@@ -6,17 +9,23 @@ import com.google.cloud.language.v1.Document.Type;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Token;
 import com.google.cloud.language.v1.PartOfSpeech.Tag;
-import java.io.IOException;
+
+//import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Service
 public class AnalizzatoreFrase {
 
+    private final LanguageServiceClient languageClient; // 2. Aggiungi il client come campo della classe
     private List<String> nomiFrase;
     private List<String> aggettiviFrase;
     private List<String> verbiFrase;
 
-    public AnalizzatoreFrase() {
+    @Autowired // 3. Inietta il LanguageServiceClient creato dalla configurazione
+    public AnalizzatoreFrase(LanguageServiceClient languageClient) {
+        this.languageClient = languageClient;
         this.nomiFrase = new ArrayList<>();
         this.aggettiviFrase = new ArrayList<>();
         this.verbiFrase = new ArrayList<>();
@@ -69,10 +78,11 @@ public class AnalizzatoreFrase {
     }
     
     //Metodo di analizzazione della frase 
-    public void analizzaFrase(String frase) throws IOException 
-    {
+    public void analizzaFrase(String frase) {
+
         // Inizializza un nuovo dizionario
         Dizionario dizionario = new Dizionario();
+
         nomiFrase.clear();
         aggettiviFrase.clear();
         verbiFrase.clear();
@@ -80,7 +90,7 @@ public class AnalizzatoreFrase {
         boolean daAggiungere = true;
 
         // Inizializzazione il client per l'API di Google Cloud Natural Language
-        try (LanguageServiceClient language = LanguageServiceClient.create()) {
+        
             
             // Creazione un oggetto Document che contiene la frase
             Document doc = Document.newBuilder()
@@ -94,7 +104,7 @@ public class AnalizzatoreFrase {
                 .build();
             
             // Invio la richiesta e ottieni la risposta
-            AnalyzeSyntaxResponse response = language.analyzeSyntax(request);
+            AnalyzeSyntaxResponse response = languageClient.analyzeSyntax(request); // Usa il client iniettato
 
             // Scorre ogni token (parola) nella risposta
             for (Token token : response.getTokensList()) {
@@ -157,6 +167,6 @@ public class AnalizzatoreFrase {
                     verbiFrase.add(parola);
                 }
             }
-        }
     }
 }
+
