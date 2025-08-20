@@ -1,5 +1,5 @@
 package com.example.Progetto;
-//import com.google.cloud.language.v1.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.google.cloud.language.v1.AnalyzeSyntaxRequest;
@@ -9,28 +9,31 @@ import com.google.cloud.language.v1.Document.Type;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Token;
 import com.google.cloud.language.v1.PartOfSpeech.Tag;
+import com.google.cloud.language.v1.DependencyEdge;
 
-//import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Service
 public class AnalizzatoreFrase {
 
-    private final LanguageServiceClient languageClient; // 2. Aggiungi il client come campo della classe
-    private final Dizionario dizionario; // inietto il dizionario
+    private final LanguageServiceClient languageClient; 
+    private final Dizionario dizionario; 
     private List<String> nomiFrase;
     private List<String> aggettiviFrase;
     private List<String> verbiFrase;
+    
+    // Lista aggiunta per memorizzare le relazioni sintattiche contestuali
+    private List<String> relazioniSintattiche;
 
-    @Autowired // 3. Inietta il LanguageServiceClient creato dalla configurazione
+    @Autowired 
     public AnalizzatoreFrase(LanguageServiceClient languageClient, Dizionario dizionario) {
         this.languageClient = languageClient;
         this.dizionario = dizionario;
         this.nomiFrase = new ArrayList<>();
         this.aggettiviFrase = new ArrayList<>();
         this.verbiFrase = new ArrayList<>();
+        this.relazioniSintattiche = new ArrayList<>();
     }
 
     // GETTER PER THYMELEAF
@@ -46,7 +49,11 @@ public class AnalizzatoreFrase {
         return verbiFrase;
     }
 
-   //Metodi per vedere la grandezza delle liste
+    public List<String> getRelazioniSintattiche() {
+        return relazioniSintattiche;
+    }
+
+    //Metodi per vedere la grandezza delle liste
     public int getSizeNomi() {
         return nomiFrase.size();
     }
@@ -58,114 +65,98 @@ public class AnalizzatoreFrase {
     public int getSizeVerbi() {
         return verbiFrase.size();
     }
+    
+    public int getSizeRelazioni() {
+        return relazioniSintattiche.size();
+    }
 
     //Metodi per vedere se sono vuote le liste
-    //Fatto per controllare se funzionava il metodo per analizare la frase
-    public boolean isEmptyNomi()
-    {
-      if(nomiFrase.isEmpty()) return true;
-      else return false;
+    public boolean isEmptyNomi() {
+      return nomiFrase.isEmpty();
     }
 
-   public boolean isEmptyAggettivi()
-    {
-      if(aggettiviFrase.isEmpty()) return true;
-      else return false;
+    public boolean isEmptyAggettivi() {
+      return aggettiviFrase.isEmpty();
     }
 
-   public boolean isEmptyVerbi()
-    {
-      if(verbiFrase.isEmpty()) return true;
-      else return false;
+    public boolean isEmptyVerbi() {
+      return verbiFrase.isEmpty();
     }
-    
-    //Metodo di analizzazione della frase 
+
+    public boolean isEmptyRelazioni() {
+      return relazioniSintattiche.isEmpty();
+    }
+
+    // Metodo di analizzazione della frase, ora con analisi contestuale
     public void analizzaFrase(String frase) {
-
+        // Pulisce le liste all'inizio di ogni nuova analisi
         nomiFrase.clear();
         aggettiviFrase.clear();
         verbiFrase.clear();
+        relazioniSintattiche.clear();
 
         boolean daAggiungere = true;
 
-        // Inizializzazione il client per l'API di Google Cloud Natural Language
+        // Crea un oggetto Document con il testo della frase
+        Document doc = Document.newBuilder()
+            .setContent(frase)
+            .setType(Type.PLAIN_TEXT)
+            .build();
+
+        // Crea la richiesta per l'analisi sintattica
+        AnalyzeSyntaxRequest request = AnalyzeSyntaxRequest.newBuilder()
+            .setDocument(doc)
+            .build();
         
-            
-            // Creazione un oggetto Document che contiene la frase
-            Document doc = Document.newBuilder()
-                .setContent(frase)
-                .setType(Type.PLAIN_TEXT)
-                .build();
+        // Invia la richiesta e ottiene la risposta
+        AnalyzeSyntaxResponse response = languageClient.analyzeSyntax(request);
 
-            // Creazione la richiesta per l'analisi sintattica
-            AnalyzeSyntaxRequest request = AnalyzeSyntaxRequest.newBuilder()
-                .setDocument(doc)
-                .build();
+        // Scorre ogni token (parola) nella risposta
+        for (int i = 0; i < response.getTokensList().size(); i++) {
+            Token token = response.getTokensList().get(i);
+            Tag partOfSpeech = token.getPartOfSpeech().getTag();
+            String parola = token.getText().getContent();
             
-            // Invio la richiesta e ottieni la risposta
-            AnalyzeSyntaxResponse response = languageClient.analyzeSyntax(request); // Usa il client iniettato
-
-            // Scorre ogni token (parola) nella risposta
-            for (Token token : response.getTokensList()) {
-                Tag partOfSpeech = token.getPartOfSpeech().getTag();
-                String parola = token.getText().getContent();
-                
-                // Assegnazione il token all'array corretto in base al suo tag
-                if (partOfSpeech == Tag.NOUN) 
-                {
-                    //controllo nel dizionario se il nome è già presente
-                    daAggiungere = true; // Resetto la variabile per ogni nuovo nome
-                    for (int i =0; i< dizionario.nomi.size(); i++)
-                    {
-                        if (dizionario.nomi.get(i).equals(parola)) 
-                        {
-                            daAggiungere = false; // Se il nome è già nel dizionario, non aggiungerlo
-                            break;
-                        }
-                    }
-                    if (daAggiungere) //se il nome non è stato trovato nel dizionario
-                    {
-                        dizionario.aggiungiNome(parola);    // Aggiungi il nome al dizionario
-                    }
-                    nomiFrase.add(parola);
-                } 
-                else if (partOfSpeech == Tag.ADJ) 
-                {
-                    //controllo nel dizionario se l'aggettivo è già presente
-                    daAggiungere = true; // Resetto la variabile per ogni nuovo nome
-                    for (int i =0; i< dizionario.aggettivi.size(); i++)
-                    {
-                        if (dizionario.aggettivi.get(i).equals(parola)) 
-                        {
-                            daAggiungere = false; // Se l'aggettivo è già nel dizionario, non aggiungerlo
-                            break;
-                        }
-                    }
-                    if (daAggiungere) //se l'aggettivo non è stato trovato nel dizionario
-                    {
-                        dizionario.aggiungiAggettivo(parola);   // Aggiungi l'aggettivo al dizionario
-                    }
-                    aggettiviFrase.add(parola);
-                } 
-                else if (partOfSpeech == Tag.VERB) 
-                {
-                    //controllo nel dizionario se il verbo è già presente
-                    daAggiungere = true; // Resetto la variabile per ogni nuovo nome
-                    for (int i =0; i< dizionario.verbi.size(); i++)
-                    {
-                        if (dizionario.verbi.get(i).equals(parola)) 
-                        {
-                            daAggiungere = false; // Se il nome è già nel dizionario, non aggiungerlo
-                            break;
-                        }
-                    }
-                    if (daAggiungere) //se il nome non è stato trovato nel dizionario
-                    {
-                        dizionario.aggiungiVerbo(parola);   // Aggiungi il verbo al dizionario  
-                    }
-                    verbiFrase.add(parola);
+            // Analisi grammaticale (parte originale del codice)
+            if (partOfSpeech == Tag.NOUN) {
+                if (!dizionario.nomi.contains(parola)) {
+                    dizionario.aggiungiNome(parola);
                 }
+                nomiFrase.add(parola);
+            } else if (partOfSpeech == Tag.ADJ) {
+                if (!dizionario.aggettivi.contains(parola)) {
+                    dizionario.aggiungiAggettivo(parola);
+                }
+                aggettiviFrase.add(parola);
+            } else if (partOfSpeech == Tag.VERB) {
+                if (!dizionario.verbi.contains(parola)) {
+                    dizionario.aggiungiVerbo(parola);
+                }
+                verbiFrase.add(parola);
             }
+
+            // Analisi contestuale (la parte che hai richiesto)
+            // L'oggetto DependencyEdge contiene le informazioni sulla relazione sintattica
+            DependencyEdge depEdge = token.getDependencyEdge();
+            
+            // headTokenIndex è l'indice della parola da cui dipende il token corrente
+            int headTokenIndex = depEdge.getHeadTokenIndex();
+            
+            // label descrive la relazione sintattica tra il token e la sua "testa"
+            String relazione = depEdge.getLabel().toString();
+            
+            // Trova la parola "testa" (head) a cui il token corrente è legato
+            String parolaHead = "ROOT"; // "ROOT" se è la radice della frase
+            if (headTokenIndex != i) { // Evita il caso in cui un token dipende da se stesso
+                 if (headTokenIndex >= 0 && headTokenIndex < response.getTokensList().size()) {
+                    parolaHead = response.getTokensList().get(headTokenIndex).getText().getContent();
+                 }
+            }
+
+            // Aggiungi una descrizione della relazione alla nuova lista
+            String descrizioneRelazione = String.format("La parola '%s' ha la relazione '%s' con la parola '%s'.", 
+                                                      parola, relazione, parolaHead);
+            relazioniSintattiche.add(descrizioneRelazione);
+        }
     }
 }
-

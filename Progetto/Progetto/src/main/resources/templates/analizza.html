@@ -140,6 +140,11 @@
             <div th:if="${error}" style="color: red;">
                 <p th:text="${error}"></p>
             </div>
+            <div th:if="${feedbackCorrettezza != null}" 
+            th:style="'margin-top:20px; font-weight:bold; color:' + (${isCorrect} ? 'green' : 'red')">
+           <p th:text="${feedbackCorrettezza}"></p>
+          </div>
+       
 
             <h3>Nomi (<span th:text="${sizeNomi}">0</span>)</h3>
             <p th:if="${#lists.isEmpty(nomi)}">Nessun nome trovato.</p>
