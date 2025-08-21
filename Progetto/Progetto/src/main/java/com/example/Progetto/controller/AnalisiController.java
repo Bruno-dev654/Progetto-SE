@@ -36,10 +36,9 @@ public class AnalisiController {
 
 
     @PostMapping("/analizza")
-    public String analyzePhrase(@RequestParam("frase") String frase,@RequestParam(name = "albero_sintattico", required = false) boolean visualizzaAlbero, Model model) throws IOException{
+    public String analyzePhrase(@RequestParam("frase") String frase,@RequestParam(name = "albero_sintattico", required = false, defaultValue = "false") boolean visualizzaAlbero, Model model){
         
            try {
-
             // Se la frase è vuota, non facciamo l'analisi
             if (frase == null || frase.trim().isEmpty()) {
                 model.addAttribute("error", "Per favore, inserisci una frase da analizzare.");
@@ -57,7 +56,14 @@ public class AnalisiController {
             model.addAttribute("sizeAggettivi", analizzatore.getSizeAggettivi());
             model.addAttribute("sizeVerbi", analizzatore.getSizeVerbi());
 
-
+            // Aggiunge la scelta dell'utente al modello, così la pagina sa se mostrare l'albero
+            model.addAttribute("visualizzaAlbero", visualizzaAlbero);
+            
+            // Se l'utente ha richiesto l'albero, aggiungiamo i dati dell'albero al modello.
+            if (visualizzaAlbero) {
+                model.addAttribute("albero", analizzatore.getAlberoSintattico());
+            }
+            
             } catch (Exception e) { // Cambia IOException con Exception per catturare ogni tipo di errore
             e.printStackTrace(); // Stampa l'errore completo nel log
             model.addAttribute("error", "Errore durante l'analisi: " + e.getMessage());

@@ -124,14 +124,14 @@
       <p>Inserisci una frase da analizzare nel campo sottostante e premi "Analizza".</p>
 
       <form action="/analizza" method="POST">
-        <input type="text" name="frase" class="input-bar" placeholder="Scrivi qui la tua frase...">
+            <input type="text" name="frase" class="input-bar" placeholder="Scrivi qui la tua frase...">
 
-        <div class="checkbox-container">
-          <input type="checkbox" id="albero_sintattico">
-          <label for="albero_sintattico">Visualizzazione albero sintattico</label>
-        </div>
+            <div class="checkbox-container">
+                <input type="checkbox" id="albero_sintattico" name="albero_sintattico" value="true" th:checked="${visualizzaAlbero}">
+                <label for="albero_sintattico">Visualizzazione albero sintattico</label>
+            </div>
 
-        <button type="submit" class="analyze-button">Analizza</button>
+            <button type="submit" class="analyze-button">Analizza</button>
       </form>
 
       <div class="results" th:if="${nomi != null}">
@@ -158,8 +158,14 @@
             <ul th:unless="${#lists.isEmpty(verbi)}">
                 <li th:each="verbo : ${verbi}" th:text="${verbo}"></li>
             </ul>
-            
-    </div>
 
+            <div th:if="${visualizzaAlbero and albero != null and not #lists.isEmpty(albero)}">
+                <h3>Albero Sintattico</h3>
+                <ul class="tree-list">
+                    <li th:each="relazione : ${albero}" th:text="${relazione}"></li>
+                </ul>
+            </div>
+      </div>       
+    </div>
 </body>
 </html>
