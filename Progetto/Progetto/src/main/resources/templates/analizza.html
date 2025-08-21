@@ -164,10 +164,40 @@
                 <li th:each="verbo : ${verbi}" th:text="${verbo}"></li>
             </ul>
 
+            <!-- Solo se l'utente ha richiesto l'albero -->
             <div th:if="${visualizzaAlbero and albero != null and not #lists.isEmpty(albero)}">
                 <h3>Albero Sintattico</h3>
                 <ul class="tree-list">
                     <li th:each="relazione : ${albero}" th:text="${relazione}"></li>
+                </ul>
+
+                <!-- Pulsante Mostra Legenda -->
+            <button type="button"
+            class="analyze-button"
+            style="margin-top:15px;"
+            onclick="document.getElementById('legenda').classList.toggle('expanded')">
+            Mostra Legenda
+            </button>
+
+            <!-- Legenda: inizialmente nascosta -->
+            <div id="legenda" class="legend-container">
+                <h3>Legenda Relazioni Sintattiche</h3>
+                <ul>
+                    <li>ROOT → Radice della frase</li>
+                    <li>NSUBJ → Soggetto nominale</li>
+                    <li>DOBJ → Oggetto diretto</li>
+                    <li>AMOD → Modificatore aggettivale (aggettivo)</li>
+                    <li>ADVMOD → Modificatore avverbiale (avverbio)</li>
+                    <li>PREP → Preposizione</li>
+                    <li>POBJ → Oggetto della preposizione</li>
+                    <li>CC → Congiunzione coordinativa</li>
+                    <li>CONJ → Connesso alla congiunzione</li>
+                    <li>ACAMP → Complemento di campo</li>
+                    <li>OCOMP → Complemento oggetto</li>
+                    <li>XCOMP → Complemento verbale esteso</li>
+                    <li>ATTR → Attributo</li>
+                    <li>APPOS → Apposizione</li>
+                    <li>PRT → Particella verbale</li>
                 </ul>
             </div>
       </div>       

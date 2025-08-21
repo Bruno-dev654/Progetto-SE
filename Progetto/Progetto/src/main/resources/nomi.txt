@@ -1,0 +1,8 @@
+gatto
+cane
+albero
+casa
+libro
+sole
+luna
+stella
