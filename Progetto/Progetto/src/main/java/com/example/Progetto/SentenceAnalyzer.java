@@ -16,70 +16,70 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class AnalizzatoreFrase {
+public class SentenceAnalyzer {
 
     private final LanguageServiceClient languageClient; 
-    private final Dizionario dizionario; 
-    private List<String> nomiFrase;
-    private List<String> aggettiviFrase;
-    private List<String> verbiFrase;
-    private List<String> alberoSintattico;
+    private final Dictionary dictionary; 
+    private List<String> sentenceNames;
+    private List<String> sentenceAdjectives;
+    private List<String> sentenceVerbs;
+    private List<String> sintatticTree;
 
 
     
     // Lista aggiunta per memorizzare le relazioni sintattiche contestuali
-    private List<String> relazioniSintattiche;
+    private List<String> sintatticRelations;
 
     @Autowired 
-    public AnalizzatoreFrase(LanguageServiceClient languageClient, Dizionario dizionario) {
+    public SentenceAnalyzer(LanguageServiceClient languageClient, Dictionary dictionary) {
         this.languageClient = languageClient;
-        this.dizionario = dizionario;
-        this.nomiFrase = new ArrayList<>();
-        this.aggettiviFrase = new ArrayList<>();
-        this.verbiFrase = new ArrayList<>();
-        this.alberoSintattico = new ArrayList<>();
-        this.relazioniSintattiche = new ArrayList<>();
+        this.dictionary = dictionary;
+        this.sentenceNames = new ArrayList<>();
+        this.sentenceAdjectives = new ArrayList<>();
+        this.sentenceVerbs = new ArrayList<>();
+        this.sintatticTree = new ArrayList<>();
+        this.sintatticRelations = new ArrayList<>();
     }
 
     // GETTER PER THYMELEAF
-    public List<String> getNomiFrase() { return nomiFrase; }
+    public List<String> getSentenceNames() { return sentenceNames; }
 
-    public List<String> getAggettiviFrase() { return aggettiviFrase; }
+    public List<String> getSentenceAdjectives() { return sentenceAdjectives; }
 
-    public List<String> getVerbiFrase() { return verbiFrase; }
+    public List<String> getSentenceVerbs() { return sentenceVerbs; }
 
-    public List<String> getAlberoSintattico() { return alberoSintattico; }
+    public List<String> getSintatticTree() { return sintatticTree; }
 
-    public List<String> getRelazioniSintattiche() { return relazioniSintattiche; }
+    public List<String> getSintatticRelations() { return sintatticRelations; }
 
    //Metodi per vedere la grandezza delle liste
-    public int getSizeNomi() { return nomiFrase.size(); }
+    public int getSizeNames() { return sentenceNames.size(); }
 
-    public int getSizeAggettivi() { return aggettiviFrase.size(); }
+    public int getSizeAdjectives() { return sentenceAdjectives.size(); }
 
-    public int getSizeVerbi() { return verbiFrase.size(); }
+    public int getSizeVerbs() { return sentenceVerbs.size(); }
     
-    public int getSizeRelazioni() { return relazioniSintattiche.size(); }
+    public int getSizeRelations() { return sintatticRelations.size(); }
 
     //Metodi per vedere se sono vuote le liste
-    public boolean isEmptyNomi() { return nomiFrase.isEmpty(); }
+    public boolean isEmptyNames() { return sentenceNames.isEmpty(); }
 
-    public boolean isEmptyAggettivi() { return aggettiviFrase.isEmpty(); }
+    public boolean isEmptyAdjectives() { return sentenceAdjectives.isEmpty(); }
 
-    public boolean isEmptyVerbi() { return verbiFrase.isEmpty(); }
+    public boolean isEmptyVerbs() { return sentenceVerbs.isEmpty(); }
 
-    public boolean isEmptyRelazioni() { return relazioniSintattiche.isEmpty(); }
+    public boolean isEmptyRelations() { return sintatticRelations.isEmpty(); }
 
     // Metodo di analizzazione della frase, ora con analisi contestuale
-    public void analizzaFrase(String frase) {
+    public void analyzeSentence(String sentence) {
         // Pulisce le liste all'inizio di ogni nuova analisi
-        nomiFrase.clear();
-        aggettiviFrase.clear();
-        verbiFrase.clear();
-        alberoSintattico.clear();
-        relazioniSintattiche.clear();
+        sentenceNames.clear();
+        sentenceAdjectives.clear();
+        sentenceVerbs.clear();
+        sintatticTree.clear();
+        sintatticRelations.clear();
 
-        boolean daAggiungere = true;
+        boolean toAdd = true;
 
         // Inizializzazione il client per l'API di Google Cloud Natural Language
             
@@ -101,25 +101,25 @@ public class AnalizzatoreFrase {
         for (int i = 0; i < response.getTokensList().size(); i++) {
             Token token = response.getTokensList().get(i);
             Tag partOfSpeech = token.getPartOfSpeech().getTag();
-            String parola = token.getText().getContent();
+            String word = token.getText().getContent();
             List<Token> tokens = response.getTokensList();
             
             // Analisi grammaticale (parte originale del codice)
             if (partOfSpeech == Tag.NOUN) {
-                if (!dizionario.nomi.contains(parola)) {
-                    dizionario.aggiungiNome(parola);
+                if (!dictionary.names.contains(word)) {
+                    dictionary.addName(word);
                 }
-                nomiFrase.add(parola);
+                sentenceNames.add(word);
             } else if (partOfSpeech == Tag.ADJ) {
-                if (!dizionario.aggettivi.contains(parola)) {
-                    dizionario.aggiungiAggettivo(parola);
+                if (!dictionary.adjectives.contains(word)) {
+                    dictionary.addAdjective(word);
                 }
-                aggettiviFrase.add(parola);
+                sentenceAdjectives.add(word);
             } else if (partOfSpeech == Tag.VERB) {
-                if (!dizionario.verbi.contains(parola)) {
-                    dizionario.aggiungiVerbo(parola);
+                if (!dictionary.verbs.contains(word)) {
+                    dictionary.addVerb(word);
                 }
-                verbiFrase.add(parola);
+                sentenceVerbs.add(word);
             }
             
             // Analisi contestuale (la parte che hai richiesto)
@@ -130,25 +130,25 @@ public class AnalizzatoreFrase {
             int headTokenIndex = depEdge.getHeadTokenIndex();
 
             // label descrive la relazione sintattica tra il token e la sua "testa"
-            String relazione = depEdge.getLabel().toString();
+            String relation = depEdge.getLabel().toString();
 
             // Trova la parola "testa" (head) a cui il token corrente è legato
-            String parolaHead = "ROOT"; // "ROOT" se è la radice della frase
+            String headWord = "ROOT"; // "ROOT" se è la radice della frase
             if (headTokenIndex != i) { // Evita il caso in cui un token dipende da se stesso
                  if (headTokenIndex >= 0 && headTokenIndex < response.getTokensList().size()) {
-                    parolaHead = response.getTokensList().get(headTokenIndex).getText().getContent();
+                    headWord = response.getTokensList().get(headTokenIndex).getText().getContent();
                  }
             }
 
             // Aggiungi una descrizione della relazione alla nuova lista
-            String descrizioneRelazione = String.format("La parola '%s' ha la relazione '%s' con la parola '%s'.", 
-                                                      parola, relazione, parolaHead);
-            relazioniSintattiche.add(descrizioneRelazione);
+            String relationDescription = String.format("La parola '%s' ha la relazione '%s' con la parola '%s'.", 
+                                                      word, relation, headWord);
+            sintatticRelations.add(relationDescription);
 
 
             if (token.getDependencyEdge().getLabel() == Label.ROOT) {
-                String relazioneAlberoSintattico = String.format("'%s' <-- [ROOT]", parola);
-                alberoSintattico.add(relazioneAlberoSintattico);
+                String sintatticTreeRelation = String.format("'%s' <-- [ROOT]", word);
+                sintatticTree.add(sintatticTreeRelation);
                 } else {
                 // Per tutti gli altri token, troviamo il token a cui sono collegati (head)
                 // e costruiamo una stringa che descrive la relazione.
@@ -157,8 +157,8 @@ public class AnalizzatoreFrase {
                 String headTokenText = headToken.getText().getContent();
                 String label = token.getDependencyEdge().getLabel().toString();
 
-                String relazioneAlberoSintattico = String.format("'%s' ---[%s]--> '%s'", parola, label, headTokenText);
-                alberoSintattico.add(relazioneAlberoSintattico);
+                String sintatticTreeRelation = String.format("'%s' ---[%s]--> '%s'", word, label, headTokenText);
+                sintatticTree.add(sintatticTreeRelation);
             }
         }
     }

@@ -8,20 +8,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.Progetto.AnalizzatoreFrase;
+import com.example.Progetto.SentenceAnalyzer;
 
 @Controller
-public class AnalisiController {
+public class ControllerAnalyser {
 
-    private final AnalizzatoreFrase analizzatore;
+    private final SentenceAnalyzer analyzer;
 
     @Autowired
-    public AnalisiController(AnalizzatoreFrase analizzatore) {
-        this.analizzatore = analizzatore;
+    public ControllerAnalyser(SentenceAnalyzer analyzer) {
+        this.analyzer = analyzer;
     }
 
     @GetMapping("/analizza")
-    public String analizza() { 
+    public String analyze() { 
         return "analizza"; 
     }
 
@@ -31,46 +31,46 @@ public class AnalisiController {
     }
 
     @GetMapping("/genera")
-    public String generaPage() { 
+    public String generatePage() { 
         return "genera"; 
     }
 
     @PostMapping("/analizza")
-    public String analyzePhrase(@RequestParam("frase") String frase,@RequestParam(name = "albero_sintattico", required = false, defaultValue = "false") boolean visualizzaAlbero, Model model){
+    public String analyzePhrase(@RequestParam("frase") String sentence,@RequestParam(name = "albero_sintattico", required = false, defaultValue = "false") boolean visualizeTree, Model model){
         
            try {
             // Se la frase è vuota, non facciamo l'analisi
-            if (frase == null || frase.trim().isEmpty()) {
+            if (sentence == null || sentence.trim().isEmpty()) {
                 model.addAttribute("error", "Per favore, inserisci una frase da analizzare.");
                 return "analizza";
             }
 
-            analizzatore.analizzaFrase(frase);
+            analyzer.analyzeSentence(sentence);
 
-            List<String> nomi = analizzatore.getNomiFrase();
-            List<String> aggettivi = analizzatore.getAggettiviFrase();
-            List<String> verbi = analizzatore.getVerbiFrase();
-            List<String> relazioni = analizzatore.getRelazioniSintattiche();
+            List<String> names = analyzer.getSentenceNames();
+            List<String> adjectives = analyzer.getSentenceAdjectives();
+            List<String> verbs = analyzer.getSentenceVerbs();
+            List<String> relations = analyzer.getSintatticRelations();
 
-            model.addAttribute("nomi", nomi);
-            model.addAttribute("aggettivi", aggettivi);
-            model.addAttribute("verbi", verbi);
-            model.addAttribute("relazioni", relazioni);
+            model.addAttribute("nomi", names);
+            model.addAttribute("aggettivi", adjectives);
+            model.addAttribute("verbi", verbs);
+            model.addAttribute("relazioni", relations);
 
-            model.addAttribute("sizeNomi", nomi.size());
-            model.addAttribute("sizeAggettivi", aggettivi.size());
-            model.addAttribute("sizeVerbi", verbi.size());
+            model.addAttribute("sizeNomi", names.size());
+            model.addAttribute("sizeAggettivi", adjectives.size());
+            model.addAttribute("sizeVerbi", verbs.size());
 
             // Aggiunge la scelta dell'utente al modello, così la pagina sa se mostrare l'albero
-            model.addAttribute("visualizzaAlbero", visualizzaAlbero);
+            model.addAttribute("visualizzaAlbero", visualizeTree);
             
             // Se l'utente ha richiesto l'albero, aggiungiamo i dati dell'albero al modello.
-            if (visualizzaAlbero) {
-                model.addAttribute("albero", analizzatore.getAlberoSintattico());
+            if (visualizeTree) {
+                model.addAttribute("albero", analyzer.getSintatticTree());
             }
             
             // Ora valutiamo correttezza usando sia nomi che verbi
-            boolean isCorrect = valutaCorrettezzaSintattica(relazioni, nomi, verbi);
+            boolean isCorrect = evaluateSintatticCorrectness(relations, names, verbs);
             model.addAttribute("isCorrect", isCorrect);
             model.addAttribute("feedbackCorrettezza", getFeedbackMessage(isCorrect));
 
@@ -82,14 +82,14 @@ public class AnalisiController {
         return "analizza";
     }
 
-    private boolean valutaCorrettezzaSintattica(List<String> relazioniSintattiche, List<String> nomi, List<String> verbi) {
+    private boolean evaluateSintatticCorrectness(List<String> sintatticRelations, List<String> names, List<String> verbs) {
         // Se manca almeno un nome o un verbo o non ci sono relazioni sintattiche, la frase è errata
-        if (relazioniSintattiche == null || relazioniSintattiche.isEmpty()) return false;
-        if (nomi == null || nomi.isEmpty()) return false;
-        if (verbi == null || verbi.isEmpty()) return false;
+        if (sintatticRelations == null || sintatticRelations.isEmpty()) return false;
+        if (names == null || names.isEmpty()) return false;
+        if (verbs == null || verbs.isEmpty()) return false;
     
         // Controllo ROOT: se non trova alcuna radice, frase errata
-        boolean hasRoot = relazioniSintattiche.stream().anyMatch(rel -> rel.toUpperCase().contains("ROOT"));
+        boolean hasRoot = sintatticRelations.stream().anyMatch(rel -> rel.toUpperCase().contains("ROOT"));
     
         return hasRoot;
     }
