@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagina Analizza</title>
+    <title>Page Analyzes</title>
     <style>
         /* CSS rimane invariato */
         body {
@@ -115,27 +115,27 @@
 
     <div class="navbar">
       <a href="/index">HOME</a>
-      <a href="/genera">GENERA</a>
-      <a class="active" href="/analizza">ANALIZZA</a>
+      <a href="/genera">GENERATE</a>
+      <a class="active" href="/analizza"> ANALYZE</a>
     </div>
 
     <div class="content">
-      <h1>Benvenuto nella pagina Analizza!</h1>
-      <p>Inserisci una frase da analizzare nel campo sottostante e premi "Analizza".</p>
+      <h1>Welcome to the Analyze page!</h1>
+      <p>Enter a sentence to analyze in the field below and press "Analyze".</p>
 
       <form action="/analizza" method="POST">
-            <input type="text" name="frase" class="input-bar" placeholder="Scrivi qui la tua frase...">
+            <input type="text" name="frase" class="input-bar" placeholder="Write here your sentence...">
 
             <div class="checkbox-container">
                 <input type="checkbox" id="albero_sintattico" name="albero_sintattico" value="true" th:checked="${visualizzaAlbero}">
-                <label for="albero_sintattico">Visualizzazione albero sintattico</label>
+                <label for="albero_sintattico">Syntax tree view</label>
             </div>
 
-            <button type="submit" class="analyze-button">Analizza</button>
+            <button type="submit" class="analyze-button">Analyze</button>
       </form>
 
       <div class="results" th:if="${nomi != null}">
-            <h2>Risultato Analisi</h2>
+            <h2>Analysis Result</h2>
 
             <div th:if="${error}" style="color: red;">
                 <p th:text="${error}"></p>
@@ -146,61 +146,62 @@
           </div>
        
 
-            <h3>Nomi (<span th:text="${sizeNomi}">0</span>)</h3>
-            <p th:if="${#lists.isEmpty(nomi)}">Nessun nome trovato.</p>
+            <h3>Name (<span th:text="${sizeNomi}">0</span>)</h3>
+            <p th:if="${#lists.isEmpty(nomi)}">No names found.</p>
             <ul th:unless="${#lists.isEmpty(nomi)}">
                 <li th:each="nome : ${nomi}" th:text="${nome}"></li>
             </ul>
 
-            <h3>Aggettivi (<span th:text="${sizeAggettivi}">0</span>)</h3>
-            <p th:if="${#lists.isEmpty(aggettivi)}">Nessun aggettivo trovato.</p>
+            <h3>Adjectives (<span th:text="${sizeAggettivi}">0</span>)</h3>
+            <p th:if="${#lists.isEmpty(aggettivi)}">No adjectives found.</p>
             <ul th:unless="${#lists.isEmpty(aggettivi)}">
                 <li th:each="aggettivo : ${aggettivi}" th:text="${aggettivo}"></li>
             </ul>
 
-            <h3>Verbi (<span th:text="${sizeVerbi}">0</span>)</h3>
-            <p th:if="${#lists.isEmpty(verbi)}">Nessun verbo trovato.</p>
+            <h3>Verbs (<span th:text="${sizeVerbi}">0</span>)</h3>
+            <p th:if="${#lists.isEmpty(verbi)}">No verbs found.</p>
             <ul th:unless="${#lists.isEmpty(verbi)}">
                 <li th:each="verbo : ${verbi}" th:text="${verbo}"></li>
             </ul>
 
             <!-- Solo se l'utente ha richiesto l'albero -->
-            <div th:if="${visualizzaAlbero and albero != null and not #lists.isEmpty(albero)}">
-                <h3>Albero Sintattico</h3>
-                <ul class="tree-list">
-                    <li th:each="relazione : ${albero}" th:text="${relazione}"></li>
-                </ul>
+            <!-- Solo se l'utente ha richiesto l'albero e ci sono relazioni -->
+<!-- Solo se l'utente ha richiesto l'albero e ci sono relazioni -->
+<div th:if="${visualizzaAlbero and albero != null and not #lists.isEmpty(albero)}">
+    <h3>Syntax tree</h3>
 
-                <!-- Pulsante Mostra Legenda -->
-            <button type="button"
+    <!-- Lista relazioni: mostrata sempre -->
+    <ul class="tree-list" style="margin-top:10px;">
+        <li th:each="relazione : ${albero}" th:text="${relazione}"></li>
+    </ul>
+
+    <!-- Pulsante: mostra/nasconde la legenda -->
+    <button type="button"
             class="analyze-button"
             style="margin-top:15px;"
-            onclick="document.getElementById('legenda').classList.toggle('expanded')">
-            Mostra Legenda
-            </button>
+            onclick="let legend=document.getElementById('legend'); legend.style.display = (legend.style.display==='none') ? 'block' : 'none';">
+        Show Legend
+    </button>
 
-            <!-- Legenda: inizialmente nascosta -->
-            <div id="legenda" class="legend-container">
-                <h3>Legenda Relazioni Sintattiche</h3>
-                <ul>
-                    <li>ROOT → Radice della frase</li>
-                    <li>NSUBJ → Soggetto nominale</li>
-                    <li>DOBJ → Oggetto diretto</li>
-                    <li>AMOD → Modificatore aggettivale (aggettivo)</li>
-                    <li>ADVMOD → Modificatore avverbiale (avverbio)</li>
-                    <li>PREP → Preposizione</li>
-                    <li>POBJ → Oggetto della preposizione</li>
-                    <li>CC → Congiunzione coordinativa</li>
-                    <li>CONJ → Connesso alla congiunzione</li>
-                    <li>ACAMP → Complemento di campo</li>
-                    <li>OCOMP → Complemento oggetto</li>
-                    <li>XCOMP → Complemento verbale esteso</li>
-                    <li>ATTR → Attributo</li>
-                    <li>APPOS → Apposizione</li>
-                    <li>PRT → Particella verbale</li>
-                </ul>
-            </div>
-      </div>       
+    <!-- Legenda: nascosta di default -->
+    <div id="legend" style="margin-top:10px; text-align:left; display:none;">
+        <h3>Legend of Syntactic Relations</h3>
+        <ul>
+            <li>ROOT → Sentence root</li>
+            <li>NSUBJ → Nominal subject</li>
+            <li>DOBJ → Direct object</li>
+            <li>AMOD → Adjectival modifier (adjective)</li>
+            <li>ADVMOD → Adverbial modifier (adverb)</li>
+            <li>PREP → Preposition</li>
+            <li>POBJ → Object of the preposition</li>
+            <li>CC → Coordinating conjunction</li>
+            <li>CONJ → Connected to the conjunction</li>
+            <li>ACAMP → Field/Domain complement</li>
+            <li>OCOMP → Object complement</li>
+            <li>XCOMP → Open clausal complement</li>
+            <li>ATTR → Attribute</li>
+            <li>APPOS → Apposition</li>
+            <li>PRT → Verbal particle</li>
+        </ul>
     </div>
-</body>
-</html>
+</div>

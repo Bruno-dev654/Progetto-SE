@@ -20,18 +20,18 @@ public class Genera {
     // Lista delle strutture sintattiche disponibili, corrispondenti a quelle in genera.html
     private final List<String> struttureSintattiche = Arrays.asList(
             "", // Indice 0, non utilizzato
-            "Casuale", // Indice 1, gestito come caso speciale
-            "Il [nome] [verbo] il [nome].",
-            "Un [nome] [verbo] una [nome].",
-            "Il [nome] [verbo] con un [nome].",
-            "Il [aggettivo] [nome] [verbo].",
-            "Il [nome] [verbo] un [aggettivo] [nome].",
-            "Il [nome] [verbo] perché è [aggettivo].",
-            "Perché il [nome] [verbo] il [nome]?",
-            "Il [nome] che [verbo] il [nome] è [aggettivo].",
-            "Il [nome] [verbo] e la [nome] [verbo].",
-            "Il [nome], che è [aggettivo], [verbo] con il [nome].",
-            "Quando il [nome] [verbo], il [nome] diventa [aggettivo]."
+            "Random", // Index 1, handled as a special case
+"The [noun] [verb] the [noun].",
+"A [noun] [verb] a [noun].",
+"The [noun] [verb] with a [noun].",
+"The [adjective] [noun] [verb].",
+"The [noun] [verb] an [adjective] [noun].",
+"The [noun] [verb] why is [adjective].",
+"Why is the [noun] [verb] the [noun]?",
+"The [noun] that [verb] the [noun] is [adjective].",
+"The [noun] [verb] and the [noun] [verb].",
+"The [noun] that is [adjective], [verb] with the [noun].",
+"When the [noun] [verb], the [noun] becomes [adjective]."
     );
 
     @Autowired
