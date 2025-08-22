@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagina Genera</title>
+    <title>Generate page</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -210,21 +210,21 @@
 
     <div class="navbar">
       <a href="/index">HOME</a>
-      <a class="active" href="/genera">GENERA</a>
-      <a href="/analizza">ANALIZZA</a>
+      <a class="active" href="/genera">GENERATE</a>
+      <a href="/analizza">ANALYZE</a>
     </div>
     
     <form action="/genera-frasi" method="post" class="content">
-      <h1>Benvenuto nella pagina Genera!</h1>
-      <p>Qui puoi definire le impostazioni per generare i tuoi dati.</p>
+      <h1>Welcome to the Generate page!</h1>
+      <p>Here you can define the settings for generating your data</p>
 
       <div class="settings-box">
-        <h2 class="settings-title">Impostazioni</h2>
+        <h2 class="settings-title">Settings</h2>
         
-        <p>In questa sezione puoi configurare le opzioni di generazione.</p>
+        <p>In this section you can configure the generation options</p>
 
         <div class="select-container">
-            <label for="num-frasi">Numero di frasi da generare:</label>
+            <label for="num-frasi">Number of sentences to generate:</label>
             <select id="num-frasi" name="num-frasi" class="sentence-select">
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -235,32 +235,32 @@
         </div>
 
         <div class="select-container">
-            <label for="struttura-sintattica">Struttura sintattica:</label>
+            <label for="struttura-sintattica">Syntactic structure:</label>
             <select id="struttura-sintattica" name="struttura-sintattica" class="sentence-select">
-                <option value="1">Casuale</option>
-                <option value="2">Il [nome] [verbo] il [nome].</option>
-                <option value="3">Un [nome] [verbo] una [nome].</option>
-                <option value="4">Il [nome] [verbo] con un [nome].</option>
-                <option value="5">Il [aggettivo] [nome] [verbo].</option>
-                <option value="6">Il [nome] [verbo] un [aggettivo] [nome].</option>
-                <option value="7">Il [nome] [verbo] perché è [aggettivo].</option>
-                <option value="8">Perché il [nome] [verbo] il [nome]?</option>
-                <option value="9">Il [nome] che [verbo] il [nome] è [aggettivo].</option>
-                <option value="10">Il [nome] [verbo] e la [nome] [verbo].</option>
-                <option value="11">Il [nome], che è [aggettivo], [verbo] con il [nome].</option>
-                <option value="12">Quando il [nome] [verbo], il [nome] diventa [aggettivo].</option>                
+                <option value="1">Random</option>
+                <option value="2">The [noun] [verb] is the [noun].</option>
+                <option value="3">A [noun] [verb] is a [noun].</option>
+                <option value="4">The [noun] [verb] with a [noun].</option>
+                <option value="5">The [adjective] [noun] [verb].</option>
+                <option value="6">The [noun] [verb] is an [adjective] [noun].</option>
+                <option value="7">The [noun] [verb] is an [adjective].</option>
+                <option value="8">Why is the [noun] [verb] the [noun]?</option>
+                <option value="9">The [noun] that [verb] is the [noun] is an [adjective].</option>
+                <option value="10">The [noun] [verb] and the [noun] [verb].</option>
+                <option value="11">The [noun], which is [adjective], [verb] with the [noun].</option>
+                <option value="12">When the [noun] [verb], the [noun] becomes [adjective].</option>            
             </select>
         </div>
         
-        <p class="input-label">Parole da aggiungere alla frase generata</p>
+        <p class="input-label">Words to add to the generated sentence</p>
 
         <div class="input-container">
             <input type="text" class="add-input" id="parolaInput" placeholder="Inserisci una parola...">
             
             <select id="tipo-parola" class="sentence-select">
-                <option value="nomi">Nome</option>
-                <option value="aggettivi">Aggettivo</option>
-                <option value="verbi">Verbo</option>
+                <option value="nomi">Name</option>
+                <option value="aggettivi">Adjective</option>
+                <option value="verbi">Verb</option>
             </select>
             <button type="button" class="add-button" onclick="aggiungiParola()">Aggiungi</button>
         </div>
@@ -272,21 +272,21 @@
       <!-- Sezione tabelle -->
       <div class="word-tables">
           <div class="table-container">
-              <h3 class="settings-title">Nomi</h3>
+              <h3 class="settings-title">Name</h3>
               <table>
                   <tbody id="nomi-table-body">
                   </tbody>
               </table>
           </div>
           <div class="table-container">
-              <h3 class="settings-title">Aggettivi</h3>
+              <h3 class="settings-title">Adjective</h3>
               <table>
                   <tbody id="aggettivi-table-body">
                   </tbody>
               </table>
           </div>
           <div class="table-container">
-              <h3 class="settings-title">Verbi</h3>
+              <h3 class="settings-title">Verb</h3>
               <table>
                   <tbody id="verbi-table-body">
                   </tbody>
@@ -296,7 +296,7 @@
 
       <!-- Il pulsante di invio del form -->
       <button type="submit" class="generate-button">
-        Genera Dati
+        Generate Data
       </button>
     </form>
     
