@@ -64,14 +64,14 @@ public class Generate {
 
         // Sostituisce i segnaposto con parole casuali
         String generatedSentence = structure;
-        while (generatedSentence.contains("[nome]")) {
-            generatedSentence = generatedSentence.replaceFirst("\\[nome\\]", getRandomName());
+        while (generatedSentence.contains("[noun]")) {
+            generatedSentence = generatedSentence.replaceFirst("\\[noun\\]", getRandomName());
         }
-        while (generatedSentence.contains("[verbo]")) {
-            generatedSentence = generatedSentence.replaceFirst("\\[verbo\\]", getRandomVerb());
+        while (generatedSentence.contains("[verb]")) {
+            generatedSentence = generatedSentence.replaceFirst("\\[verb\\]", getRandomVerb());
         }
-        while (generatedSentence.contains("[aggettivo]")) {
-            generatedSentence = generatedSentence.replaceFirst("\\[aggettivo\\]", getRandomAdjective());
+        while (generatedSentence.contains("[adjective]")) {
+            generatedSentence = generatedSentence.replaceFirst("\\[adjective\\]", getRandomAdjective());
         }
 
         // Rende maiuscola la prima lettera della frase
