@@ -1,8 +1,8 @@
-gatto
-cane
-albero
-casa
-libro
-sole
-luna
-stella
+cat
+dog
+tree
+house
+book
+sun
+moon
+star

@@ -96,9 +96,9 @@ public class ControllerAnalyser {
 
     private String getFeedbackMessage(boolean isCorrect) {
         if (isCorrect) {
-            return "La frase sembra sintatticamente corretta!";
+            return "The sentence seems syntactically correct!";
         } else {
-            return "La frase inserita potrebbe essere sintatticamente errata. Potrebbe mancare un verbo, un soggetto, o gli elementi non sono ben collegati.";
+            return "The sentence you entered may be syntactically incorrect. It may be missing a verb, a subject, or the elements are not well connected.";
         }
     }
 }

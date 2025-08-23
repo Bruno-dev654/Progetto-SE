@@ -1,7 +1,7 @@
-bello
-grande
-rosso
-veloce
-felice
-triste
-intelligente
+beautiful
+big
+red
+fast
+happy
+sad
+intelligent

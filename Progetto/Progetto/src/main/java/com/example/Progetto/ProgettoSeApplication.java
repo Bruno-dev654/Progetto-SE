@@ -19,13 +19,13 @@ public class ProgettoSeApplication {
 	 * Se invece funziona, vedremo i messaggi di caricamento e un messaggio finale di successo.
 	 */
 	@Bean
-	public CommandLineRunner testDizionario(Dizionario dizionario) {
+	public CommandLineRunner testDizionario(Dictionary dizionario) {
 		return args -> {
 			System.out.println("**************************************************");
 			System.out.println("TEST DI AVVIO: Controllo del bean Dizionario...");
 			if (dizionario != null) {
 				System.out.println("SUCCESS: Il bean Dizionario è stato caricato correttamente!");
-				System.out.println("Contenuto: " + dizionario.getNomi().size() + " nomi, " + dizionario.getAggettivi().size() + " aggettivi, " + dizionario.getVerbi().size() + " verbi.");
+				System.out.println("Contenuto: " + dizionario.getNames().size() + " nomi, " + dizionario.getAdjectives().size() + " aggettivi, " + dizionario.getVerbs().size() + " verbi.");
 			} else {
 				System.err.println("ERRORE CRITICO: Il bean Dizionario è nullo!");
 			}

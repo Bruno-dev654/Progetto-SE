@@ -17,9 +17,9 @@ public class AppConfig {
      * @return L'unica istanza del Dizionario per l'applicazione.
      */
     @Bean
-   public Dizionario dizionario() {
+   public Dictionary dizionario() {
         // 1. Creiamo una nuova istanza del dizionario
-        Dizionario nuovoDizionario = new Dizionario();
+        Dictionary nuovoDizionario = new Dictionary();
         
         // 2. Chiamiamo manualmente il suo metodo di inizializzazione per caricare i file
         nuovoDizionario.init();

@@ -85,7 +85,7 @@ public class SentenceAnalyzer {
             
             // Creazione un oggetto Document che contiene la frase
             Document doc = Document.newBuilder()
-                .setContent(frase)
+                .setContent(sentence)
                 .setType(Type.PLAIN_TEXT)
                 .build();
 
