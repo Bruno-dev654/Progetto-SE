@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frasi Generate</title>
+    <title>Generated Phrases</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -102,16 +102,16 @@
 
     <div class="navbar">
       <a href="/index">HOME</a>
-      <a class="active" href="/genera">GENERA</a>
-      <a href="/analizza">ANALIZZA</a>
+      <a class="active" href="/genera">GENERATE</a>
+      <a href="/analizza">ANALYZE</a>
     </div>
     
     <div class="content">
-      <h1>Risultato della Generazione</h1>
-      <p>Ecco le frasi che sono state generate in base alle tue impostazioni.</p>
+      <h1>Result of Generation</h1>
+      <p>Here are the sentences that were generated based on your settings.</p>
 
       <div class="results-box">
-        <h2 class="results-title">Frasi Generate</h2>
+        <h2 class="results-title">Generated Phrases</h2>
         
         <!-- Controlla se la lista non è vuota e non contiene un messaggio di errore -->
         <ul th:if="${!frasi.isEmpty() and !frasi.get(0).startsWith('Errore:')}">
@@ -125,7 +125,7 @@
 
       </div>
       
-      <a href="/genera" class="back-button">Genera Nuove Frasi</a>
+      <a href="/genera" class="back-button">Generate New Phrases</a>
     </div>
 
 </body>

@@ -262,7 +262,7 @@
                 <option value="aggettivi">Adjective</option>
                 <option value="verbi">Verb</option>
             </select>
-            <button type="button" class="add-button" onclick="aggiungiParola()">Aggiungi</button>
+            <button type="button" class="add-button" onclick="aggiungiParola()">Add</button>
         </div>
       </div>
       
@@ -308,7 +308,7 @@
             var tipo = tipoParolaSelect.value;
             
             if (parola !== "") {
-                const message = `Parola '${parola}' (${tipo}) aggiunta!`;
+                const message = `Added '${parola}' !`;
                 showMessageBox(message);
 
                 // Aggiunge la parola alla tabella corretta
