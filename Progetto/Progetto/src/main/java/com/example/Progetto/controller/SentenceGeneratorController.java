@@ -2,6 +2,8 @@ package com.example.Progetto.controller;
 
 import com.example.Progetto.Dictionary;
 import com.example.Progetto.Generate;
+import com.example.Progetto.SentenceResult;
+import com.example.Progetto.ToxicityAnalyzer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,11 +25,13 @@ public class SentenceGeneratorController {
 
     private final Generate generate;
     private final Dictionary dictionary;
+    private final ToxicityAnalyzer toxicityAnalyzer;
 
     @Autowired
-    public SentenceGeneratorController(Generate generate, Dictionary dictionary) {
+    public SentenceGeneratorController(Generate generate, Dictionary dictionary, ToxicityAnalyzer toxicityAnalyzer) {
         this.generate = generate;
         this.dictionary = dictionary;
+        this.toxicityAnalyzer = toxicityAnalyzer;
     }
 
     /**
@@ -64,14 +70,28 @@ public class SentenceGeneratorController {
             }
         }
 
-        // Genera le frasi
-        List<String> generatedSentences = new ArrayList<>();
+        // Converte gli array di nuove parole in Liste per passarle al generatore
+        List<String> userNamesList = (newNames != null) ? Arrays.asList(newNames) : Collections.emptyList();
+        List<String> userAdjectivesList = (newAdjectives != null) ? Arrays.asList(newAdjectives) : Collections.emptyList();
+        List<String> userVerbsList = (newVerbs != null) ? Arrays.asList(newVerbs) : Collections.emptyList();
+
+
+        // Lista per contenere i risultati completi (frase + analisi)
+        List<SentenceResult> results = new ArrayList<>();
+
         for (int i = 0; i < sentenceNumber; i++) {
-            generatedSentences.add(generate.createSentence(structureId));
+            // 1. Genera la frase
+            String sentence = generate.createSentence(structureId, userNamesList, userAdjectivesList, userVerbsList);
+            
+            // 2. Analizza la tossicità della frase generata
+            String toxicityMessage = toxicityAnalyzer.analyzeToxicity(sentence);
+            
+            // 3. Crea un oggetto risultato e lo aggiunge alla lista
+            results.add(new SentenceResult(sentence, toxicityMessage));
         }
 
-        // Aggiunge le frasi generate al modello per la visualizzazione
-        model.addAttribute("frasi", generatedSentences);
+        // Aggiunge la lista di risultati al modello
+        model.addAttribute("risultati", results);
 
         return "risultatoGenera"; // Nome del file HTML per visualizzare i risultati
     }

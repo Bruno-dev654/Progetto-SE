@@ -1,25 +1,22 @@
 <!DOCTYPE html>
-<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generated Phrases</title>
+    <title>Generation Results</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             font-family: 'Inter', sans-serif;
-            text-align: center;
             background-color: #f3f4f6;
+            color: #1f2937;
         }
-
         .navbar {
             background-color: #333;
             overflow: hidden;
-            text-align: left;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-
         .navbar a {
             float: left;
             display: block;
@@ -27,59 +24,59 @@
             text-align: center;
             padding: 14px 20px;
             text-decoration: none;
-            transition: background-color 0.3s ease;
         }
-
-        .navbar a:hover {
-            background-color: #555;
-        }
-
-        .navbar a.active {
-            background-color: #04AA6D;
-            color: white;
-        }
-
         .content {
             padding: 2rem;
             max-width: 960px;
             margin: auto;
-        }
-
-        .results-box {
-            min-height: 200px;
-            border: 2px solid #ccc;
-            border-radius: 1rem;
-            padding: 2rem;
-            margin: 2rem auto;
-            text-align: left;
-            background-color: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .results-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 1.5rem;
-            color: #1f2937;
             text-align: center;
         }
-        
-        ul {
-            list-style-type: none;
-            padding: 0;
+        .results-container {
+            margin-top: 2rem;
+            background-color: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
         }
-
-        li {
-            background-color: #f9fafb;
+        .result-item {
             padding: 1rem;
-            border-radius: 0.5rem;
-            margin-bottom: 0.75rem;
-            border-left: 4px solid #04AA6D;
-            font-size: 1.1rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
         }
-
+        @media (min-width: 768px) {
+            .result-item {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .sentence-text {
+            flex-grow: 1;
+        }
+        .toxicity-status {
+            font-weight: bold;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            white-space: nowrap;
+        }
+        .status-ok {
+            color: #059669; /* Green */
+            background-color: #d1fae5;
+        }
+        .status-toxic {
+            color: #dc2626; /* Red */
+            background-color: #fee2e2;
+        }
         .back-button {
-            margin-top: 20px;
+            margin-top: 2rem;
             padding: 12px 24px;
             font-size: 16px;
             cursor: pointer;
@@ -87,11 +84,9 @@
             color: white;
             border: none;
             border-radius: 5px;
-            transition: transform 0.3s ease, background-color 0.3s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-decoration: none;
+            transition: transform 0.3s ease, background-color 0.3s;
         }
-
         .back-button:hover {
             transform: scale(1.05);
             background-color: #555;
@@ -102,30 +97,36 @@
 
     <div class="navbar">
       <a href="/index">HOME</a>
-      <a class="active" href="/genera">GENERATE</a>
+      <a href="/genera">GENERATE</a>
       <a href="/analizza">ANALYZE</a>
     </div>
     
     <div class="content">
-      <h1>Result of Generation</h1>
-      <p>Here are the sentences that were generated based on your settings.</p>
+        <h1>Generated Sentences</h1>
+        <p>Here are the results of the generation with toxicity analysis.</p>
 
-      <div class="results-box">
-        <h2 class="results-title">Generated Phrases</h2>
-        
-        <!-- Controlla se la lista non è vuota e non contiene un messaggio di errore -->
-        <ul th:if="${!frasi.isEmpty() and !frasi.get(0).startsWith('Errore:')}">
-            <li th:each="frase : ${frasi}" th:text="${frase}"></li>
-        </ul>
-        
-        <!-- Mostra un messaggio di errore o se non sono state generate frasi -->
-        <div th:if="${frasi.isEmpty() or frasi.get(0).startsWith('Errore:')}">
-             <p th:text="${frasi.isEmpty() ? 'Nessuna frase generata.' : frasi.get(0)}" style="color: red; text-align: center;"></p>
+        <div class="results-container" th:if="${not #lists.isEmpty(risultati)}">
+            <!-- Iterate over each SentenceResult object in the 'risultati' list -->
+            <div th:each="risultato : ${risultati}" class="result-item">
+                
+                <!-- Display the generated sentence -->
+                <span class="sentence-text" th:text="${risultato.sentence}">Sentence text...</span>
+                
+                <!-- Display the toxicity message with conditional styling -->
+                <span class="toxicity-status"
+                      th:text="${risultato.toxicityMessage}"
+                      th:classappend="${risultato.isToxic ? 'status-toxic' : 'status-ok'}">
+                      Status...
+                </span>
+
+            </div>
         </div>
 
-      </div>
-      
-      <a href="/genera" class="back-button">Generate New Phrases</a>
+        <div th:if="${#lists.isEmpty(risultati)}">
+            <p>No sentences were generated.</p>
+        </div>
+        
+        <a href="/genera" class="back-button">Go Back</a>
     </div>
 
 </body>
