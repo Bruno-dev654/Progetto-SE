@@ -1,6 +1,7 @@
 package com.example.Progetto;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import com.google.cloud.language.v1.AnalyzeSyntaxRequest;
 import com.google.cloud.language.v1.AnalyzeSyntaxResponse;
@@ -31,8 +32,8 @@ public class SentenceAnalyzer {
     private List<String> sintatticRelations;
 
     @Autowired 
-    public SentenceAnalyzer(LanguageServiceClient languageClient, Dictionary dictionary) {
-        this.languageClient = languageClient;
+    public SentenceAnalyzer(@Qualifier("languageServiceClientV1") LanguageServiceClient languageServiceClient, Dictionary dictionary) {
+        this.languageClient = languageServiceClient;
         this.dictionary = dictionary;
         this.sentenceNames = new ArrayList<>();
         this.sentenceAdjectives = new ArrayList<>();
