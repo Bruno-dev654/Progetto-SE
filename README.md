@@ -49,7 +49,7 @@ Il progetto segue il paradigma MVC (Model-View-Controller) tipico di Spring Boot
 4. Repository: Gestisce l'accesso ai dati (es. vocabolario interno), se presente.
 
 ## Indicazioni delle principali funzioni riutilizzate da librerie esistenti   
-## Funzioni utilizzate dai file .java nella cartella **main**
+### Funzioni utilizzate dai file .java nella cartella **main**
 
 | Libreria | Utilizzo |
 |----------|----------|
