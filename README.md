@@ -90,12 +90,6 @@ Il progetto segue il paradigma MVC (Model-View-Controller) tipico di Spring Boot
 | **getDependencyEdge**<br>`com.google.cloud.language.v1.`<br>`Token.getDependencyEdge()` | Dependency tree parse for this token. |
 | **moderateText**<br>`com.google.cloud.language.v1.`<br>`LanguageServiceClient.moderateText(ModerateTextRequest request)` | Moderates a document for harmful and sensitive categories. |
 
- ## Funzioni utilizzate dai file .java nella cartella **test**
-
- |Libreria  | Utilizzo |
- |----------|----------|
- | **mock**<br>`org.mockito.Mockito.mock(Class<LanguageServiceClient> classToMock)`            |  Creates mock object of given class or interface. |
-
 ## Indicazione di principali API esterne utilizzate
 1. Fondamentale per l'esecuzione corretta del programma è l'API Google Natural Language che viene usato nelle classi java sia per l'analisi delle frasi inserite dall'utente che nelle frasi generate dall'applicazione.
 2. L'API verifica che le frasi inserite dall'utente siano sintatticamente corrette e ne stampa i syntactic-tree
