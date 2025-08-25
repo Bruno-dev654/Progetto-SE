@@ -26,7 +26,7 @@ Segui questi passaggi per clonare e avviare il progetto:
    -cliaccando Download ZIP viene scaricato un file .zip contenente tutto il progetto
 3. Aprire Esplora file e navigare alla cartella dove e' stato scaricato il file .zip
    -right-click sul file zip, "Estrai tutto" e selezionare la cartella in cui estrarre il contenuto del file
-4. **IMPORTANTE**: E' necessario avere una chiave personale per le API GOOGLE NLP utilizzate nel programma, scaricare la chiave in formato json e         salvarla nella cartella base del progetto con nome key-google.json
+4. **IMPORTANTE**: E' necessario avere una chiave personale per le API GOOGLE NLP utilizzate nel programma, scaricare la chiave in formato json e         salvarla nella cartella base del progetto con nome se2025-468911-2c7deef522f5.json
 
 //////////////NON SO SE SI FACCIAO COSÌ
 5. Compila il progetto con Maven:
@@ -38,39 +38,6 @@ Segui questi passaggi per clonare e avviare il progetto:
 
 L'applicazione sarà disponibile all'indirizzo `http://localhost:8080`.
 
- ## **Istruzioni su come creare la variabile d'ambiente JAVA_HOME con jdk**
- **Ambiente Linux**
-
-  1.  **Trova il percorso del tuo JDK**  
-      *(es. `/usr/lib/jvm/java-17-openjdk-amd64`)*
-
-  Eseguire i seguenti comandi da bash
-
-  2.  **Modifica il file ~/.bashrc**  
-      `nano ~/.bashrc`
-      Aggiungere alla fine del file le seguenti righe:  
-      `export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64` (Sostituire il percorso con quello trovato)  
-      `export PATH=$JAVA_HOME/bin:$PATH`    
-
-  3.  **Applica le modifiche**  
-      `source ~/.bashrc`
-
-  4.  **Verifica**  
-      `echo $JAVA_HOME`  
-      `java -version`
-
-
-**Ambiente Windows**
-
-  1. **Individuare il percorso del tuo JDK**   
-   *(es. `C:\Program Files\Java\jdk-21`)*
-
-  2. **Modificare le variabili di sistema**  
-    Premere tasto windows e cercare _"Variabili d'ambiente"_ e aprire _"Modifica le variabili d'ambiente di  sistema"._  
-
-  3. **Creare la variabile d'ambiente JAVA_HOME**  
-    Cliccare su _"Variabili d'ambiente..."_, cliccare su _"Nuova..."_ sotto a "Variabili di sistema", nella voce "Nome variabile" inserire **"JAVA_HOME"** e nella voce "Valore variabile" inserire il percorso trovato in precedenza e premere ok.
- 
 ## Utilizzo
 Una volta avviata l'applicazione, potrai interagire con le sue funzionalità tramite un'interfaccia web semplice e intuitiva, accessibile tramite browser. 
 
