@@ -39,20 +39,40 @@ Segui questi passaggi per clonare e avviare il progetto:
 L'applicazione sarà disponibile all'indirizzo `http://localhost:8080`.
 
  ## **Istruzioni su come creare la variabile d'ambiente JAVA_HOME con jdk**
- ////////// non so come si faccia ////////////
+ **Ambiente Linux**
+
+  1.  **Trova il percorso del tuo JDK**  
+      *(es. `/usr/lib/jvm/java-17-openjdk-amd64`)*
+
+  Eseguire i seguenti comandi da bash
+
+  2.  **Modifica il file ~/.bashrc**  
+      `nano ~/.bashrc`
+      Aggiungere alla fine del file le seguenti righe:  
+      `export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64` (Sostituire il percorso con quello trovato)  
+      `export PATH=$JAVA_HOME/bin:$PATH`    
+
+  3.  **Applica le modifiche**  
+      `source ~/.bashrc`
+
+  4.  **Verifica**  
+      `echo $JAVA_HOME`  
+      `java -version`
+
+
+**Ambiente Windows**
+
+  1. **Individuare il percorso del tuo JDK**   
+   *(es. `C:\Program Files\Java\jdk-21`)*
+
+  2. **Modificare le variabili di sistema**  
+    Premere tasto windows e cercare _"Variabili d'ambiente"_ e aprire _"Modifica le variabili d'ambiente di  sistema"._  
+
+  3. **Creare la variabile d'ambiente JAVA_HOME**  
+    Cliccare su _"Variabili d'ambiente..."_, cliccare su _"Nuova..."_ sotto a "Variabili di sistema", nella voce "Nome variabile" inserire **"JAVA_HOME"** e nella voce "Valore variabile" inserire il percorso trovato in precedenza e premere ok.
  
 ## Utilizzo
-Una volta avviata l'applicazione, potrai interagire con le sue funzionalità tramite un'interfaccia web semplice e intuitiva, accessibile tramite browser. Non sono necessari client API esterni.
-
-///////////////
-Esempio di Analisi Morfologica:
-
-
-Esempio di Generazione di Frasi:
-
-
-Corpo della richiesta (JSON):
-///////////////
+Una volta avviata l'applicazione, potrai interagire con le sue funzionalità tramite un'interfaccia web semplice e intuitiva, accessibile tramite browser. 
 
 ## Architettura del Progetto
 Il progetto segue il paradigma MVC (Model-View-Controller) tipico di Spring Boot, con i seguenti componenti principali:
